@@ -1,0 +1,96 @@
+Website Builder Prompt
+
+Create a professional website for a nonprofit organization called Caloosahatchee Cleanup, based in Southwest Florida. The website should reflect an environmental and coastal theme and use the attached logo. Incorporate the provided image of the polluted beach with mangroves as a visual reference for campaign imagery.
+
+Overall Style
+
+Clean, modern, and easy to navigate
+
+Coastal color palette (blues, greens, sand tones)
+
+Clear call-to-action buttons
+
+Mobile responsive layout
+
+Required Pages & Features
+1. Home Page
+
+Large hero image (river or mangrove cleanup imagery)
+
+Mission statement section
+
+“Volunteer” button
+
+“Donate” button
+
+Section highlighting past cleanup campaigns with photos
+
+Contact information:
+
+Phone: 239-464-0032
+
+Email: info.caloosahatcheecleanup@gmail.com
+
+2. Volunteer Sign-Up Page
+
+Volunteer registration form that requires:
+
+Full name
+
+Email address
+
+Phone number
+
+Age
+
+Group attendance option (if attending as a group, allow entry of additional names and contact information)
+
+Digital waiver that must be reviewed and signed before completing registration
+
+Confirmation email after signup
+
+Admin notification when someone registers
+
+3. Campaigns Page
+
+Display upcoming cleanup events
+
+Allow users to sign up directly for specific campaigns
+
+Show past campaigns with images and impact summaries
+
+4. Admin Portal (Restricted Access)
+
+Admin login system
+
+Ability to:
+
+Create and edit upcoming campaigns
+
+Upload campaign images
+
+View volunteer lists
+
+Send email and SMS notifications to registered volunteers
+
+Send reminders for upcoming events
+
+Send newsletters
+
+5. Donate Page
+
+Donation button with secure online payment processing
+
+Allow donors to choose a specific campaign or general fund
+
+Include payment methods (credit/debit card and other standard online payment options)
+
+Admin access to connect and manage banking information securely
+
+6. Reviews / Testimonials Page
+
+Section for volunteers to upload written reviews of their experience
+
+Option to upload a photo (optional)
+
+Admin approval before reviews are publicly displayed
