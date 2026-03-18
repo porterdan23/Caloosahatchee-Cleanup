@@ -1,0 +1,165 @@
+1. User Login & Account Management
+
+Please create a secure user login system for the website.
+
+Users should be able to:
+
+Create an account using email and password
+
+Log in from both desktop and mobile devices
+
+Update their profile information
+
+Manage notification preferences including:
+
+Email notifications
+
+Push notifications
+
+Volunteer alerts
+
+Event reminders
+
+Admin features should include:
+
+Viewing registered users
+
+Sending updates or announcements
+
+Managing user accounts if necessary.
+
+2. Sponsorship Page
+
+Please create a “Sponsorship” tab where individuals and businesses can financially support Caloosahatchee Cleanup.
+
+This page should allow users to:
+
+Sponsor specific cleanup campaigns
+
+Sponsor the organization as a whole
+
+Admin should be able to:
+
+Connect a bank account or payment processor
+
+Track sponsorships and donations.
+
+Users should be able to:
+
+Enter credit card information securely
+
+Select a sponsorship level
+
+Receive confirmation of their sponsorship.
+
+Suggested Sponsorship Levels
+
+River Supporter – $100
+
+Name listed on website supporter page
+
+River Guardian – $500
+
+Website recognition
+
+Social media thank-you post
+
+River Champion – $1,000
+
+Website recognition
+
+Social media recognition
+
+Logo placement on campaign page
+
+River Partner – $5,000+
+
+Logo placement on sponsor section of website
+
+Recognition at cleanup events
+
+Featured sponsor acknowledgment
+
+These levels can be adjusted by the admin if needed.
+
+3. Waterfront Cleanup Services
+
+Please create a “Waterfront Services” tab where waterfront homeowners and businesses can hire Caloosahatchee Cleanup to clean seawalls and surrounding shoreline areas.
+
+This page should include:
+
+A description of the service
+
+Ability for customers to request service
+
+Service options:
+
+One-time cleanup
+
+Annual cleanup
+
+Recurring service (quarterly or custom schedule)
+
+Customers should be able to:
+
+Submit contact information
+
+Enter the location of their property
+
+Request a quote or schedule service.
+
+Admin features should include:
+
+Setting pricing
+
+Receiving service requests
+
+Managing bookings.
+
+4. Volunteer Sign-Up & Event Management
+
+Please create a “Volunteer” tab where users can sign up to participate in cleanup events.
+
+Features should include:
+
+Volunteer registration form
+
+Upcoming cleanup events calendar
+
+Ability to RSVP to events
+
+Option to sign volunteer waivers online
+
+Option to track volunteer hours
+
+Admin should be able to:
+
+Create new cleanup events
+
+Limit the number of volunteers if needed
+
+View volunteer lists
+
+Send event updates or reminders.
+
+5. Interactive Cleanup Map
+
+Please create an interactive map of the Caloosahatchee River showing:
+
+Previous cleanup locations
+
+Areas that still need cleanup
+
+Locations of scheduled cleanup events
+
+Areas sponsored by donors
+
+Map features should include:
+
+Pins or markers showing cleanup areas
+
+Ability to click each pin to see cleanup details
+
+Option for users to report areas needing cleanup.
+
+This map will help the community visually understand the impact of our work and identify areas that need attention.
