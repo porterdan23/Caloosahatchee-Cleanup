@@ -39,6 +39,13 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
 });
 
+
+function validatePassword(password: string): string | null {
+  if (!password || password.length < 8) return "Password must be at least 8 characters";
+  if (!/[A-Z]/.test(password)) return "Password must contain at least one uppercase letter";
+  if (!/[0-9]/.test(password)) return "Password must contain at least one number";
+  return null;
+}
 export async function registerRoutes(
   httpServer: Server,
   app: Express
@@ -52,7 +59,7 @@ export async function registerRoutes(
       secret: process.env.SESSION_SECRET || "caloosahatchee-cleanup-secret",
       resave: false,
       saveUninitialized: false,
-      cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000, httpOnly: true, sameSite: "lax" },
+      cookie: { secure: process.env.NODE_ENV === "production", maxAge: 24 * 60 * 60 * 1000, httpOnly: true, sameSite: "strict" },
     })
   );
 
@@ -150,7 +157,7 @@ export async function registerRoutes(
     }
   });
 
-  app.delete("/api/rsvps/:id", async (req, res) => {
+  app.delete("/api/rsvps/:id", requireMember, async (req, res) => {
     try {
       await storage.deleteVolunteerRsvp(parseInt(req.params.id));
       res.status(204).send();
@@ -160,7 +167,7 @@ export async function registerRoutes(
   });
 
   // ─── VOLUNTEER HOURS ─────────────────────────────────────────
-  app.get("/api/volunteer-hours", async (req, res) => {
+  app.get("/api/volunteer-hours", requireMember, async (req, res) => {
     try {
       const email = req.query.email as string | undefined;
       const hours = await storage.getVolunteerHours(email);
@@ -170,7 +177,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/volunteer-hours", async (req, res) => {
+  app.post("/api/volunteer-hours", requireMember, async (req, res) => {
     const data = { ...req.body, hours: parseFloat(req.body.hours), loggedAt: new Date().toISOString() };
     const parsed = insertVolunteerHoursSchema.safeParse(data);
     if (!parsed.success) return res.status(400).json({ message: parsed.error.message });

@@ -23,7 +23,7 @@ const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Valid email required"),
   phone: z.string().optional(),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  password: z.string().min(8, "Password must be at least 8 characters").regex(/[A-Z]/, "Must contain an uppercase letter").regex(/[0-9]/, "Must contain a number"),
   confirmPassword: z.string(),
 }).refine(d => d.password === d.confirmPassword, {
   message: "Passwords do not match",
@@ -37,7 +37,7 @@ const profileSchema = z.object({
 
 const passwordSchema = z.object({
   currentPassword: z.string().min(1, "Required"),
-  newPassword: z.string().min(8, "Must be at least 8 characters"),
+  newPassword: z.string().min(8, "Must be at least 8 characters").regex(/[A-Z]/, "Must contain an uppercase letter").regex(/[0-9]/, "Must contain a number"),
   confirmPassword: z.string(),
 }).refine(d => d.newPassword === d.confirmPassword, {
   message: "Passwords do not match",
