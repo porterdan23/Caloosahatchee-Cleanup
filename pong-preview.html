@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pong Preview</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #111; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: monospace; gap: 16px; }
+    h1 { color: #fff; font-size: 2rem; letter-spacing: 0.3em; }
+    canvas { border: 2px solid #333; border-radius: 4px; }
+    p { color: #666; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <h1>PONG</h1>
+  <canvas id="c" width="800" height="500"></canvas>
+  <p>W/S &mdash; Left paddle &nbsp;|&nbsp; &uarr;/&darr; &mdash; Right paddle (AI mode) &nbsp;|&nbsp; SPACE &mdash; Start / Restart</p>
+
+  <script>
+    const canvas = document.getElementById('c');
+    const ctx = canvas.getContext('2d');
+    const W = 800, H = 500;
+    const PW = 12, PH = 80, BS = 10;
+    const PSPEED = 400, WIN = 11;
+
+    const keys = new Set();
+    window.addEventListener('keydown', e => {
+      keys.add(e.key);
+      if ([' ', 'ArrowUp', 'ArrowDown'].includes(e.key)) e.preventDefault();
+      if (e.key === ' ') {
+        if (s.phase === 'start' || s.phase === 'gameover') {
+          Object.assign(s, init());
+          s.phase = 'playing';
+        }
+      }
+    });
+    window.addEventListener('keyup', e => keys.delete(e.key));
+
+    function init() {
+      return {
+        bx: W/2, by: H/2,
+        bvx: 260 * (Math.random()>0.5?1:-1),
+        bvy: 180 * (Math.random()>0.5?1:-1),
+        ly: H/2 - PH/2, ry: H/2 - PH/2,
+        ls: 0, rs: 0,
+        phase: 'start', winner: null
+      };
+    }
+
+    let s = init();
+
+    function resetBall(toLeft) {
+      s.bx = W/2; s.by = H/2;
+      s.bvx = 260 * (toLeft ? -1 : 1);
+      s.bvy = (80 + Math.random()*120) * (Math.random()>0.5?1:-1);
+    }
+
+    function ai(py, dt, side) {
+      const relevant = side==='left' ? s.bvx<0 : s.bvx>0;
+      const target = relevant ? s.by : H/2;
+      const center = py + PH/2;
+      const diff = target - center;
+      const move = Math.max(-PSPEED*0.72*dt, Math.min(PSPEED*0.72*dt, diff));
+      return Math.max(0, Math.min(H-PH, py+move));
+    }
+
+    function update(dt) {
+      if (s.phase !== 'playing') return;
+
+      // Left (human W/S)
+      if (keys.has('w') || keys.has('W')) s.ly = Math.max(0, s.ly - PSPEED*dt);
+      if (keys.has('s') || keys.has('S')) s.ly = Math.min(H-PH, s.ly + PSPEED*dt);
+
+      // Right (AI)
+      s.ry = ai(s.ry, dt, 'right');
+
+      // Ball
+      s.bx += s.bvx * dt;
+      s.by += s.bvy * dt;
+
+      if (s.by - BS/2 <= 0) { s.by = BS/2; s.bvy = Math.abs(s.bvy); }
+      if (s.by + BS/2 >= H) { s.by = H-BS/2; s.bvy = -Math.abs(s.bvy); }
+
+      // Left paddle hit
+      if (s.bx - BS/2 <= 20+PW && s.bx - BS/2 >= 20 && s.by >= s.ly-BS/2 && s.by <= s.ly+PH+BS/2) {
+        s.bx = 20+PW+BS/2;
+        const rel = (s.by - (s.ly + PH/2)) / (PH/2);
+        const angle = rel * (Math.PI/3);
+        const spd = Math.min(Math.hypot(s.bvx, s.bvy)*1.05, 700);
+        s.bvx = Math.abs(Math.cos(angle)*spd);
+        s.bvy = Math.sin(angle)*spd;
+      }
+
+      // Right paddle hit
+      if (s.bx + BS/2 >= W-20-PW && s.bx + BS/2 <= W-20 && s.by >= s.ry-BS/2 && s.by <= s.ry+PH+BS/2) {
+        s.bx = W-20-PW-BS/2;
+        const rel = (s.by - (s.ry + PH/2)) / (PH/2);
+        const angle = rel * (Math.PI/3);
+        const spd = Math.min(Math.hypot(s.bvx, s.bvy)*1.05, 700);
+        s.bvx = -(Math.abs(Math.cos(angle)*spd));
+        s.bvy = Math.sin(angle)*spd;
+      }
+
+      // Out of bounds
+      if (s.bx < 0) {
+        s.rs++;
+        if (s.rs >= WIN) { s.winner='right'; s.phase='gameover'; }
+        else resetBall(false);
+      } else if (s.bx > W) {
+        s.ls++;
+        if (s.ls >= WIN) { s.winner='left'; s.phase='gameover'; }
+        else resetBall(true);
+      }
+    }
+
+    function draw() {
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, W, H);
+
+      // Center line
+      ctx.setLineDash([10,14]);
+      ctx.strokeStyle = '#333';
+      ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(W/2, 0); ctx.lineTo(W/2, H); ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Scores
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 64px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(s.ls, W/2 - 100, 80);
+      ctx.fillText(s.rs, W/2 + 100, 80);
+
+      // Paddles
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.roundRect(20, s.ly, PW, PH, 4); ctx.fill();
+      ctx.beginPath(); ctx.roundRect(W-20-PW, s.ry, PW, PH, 4); ctx.fill();
+
+      // Ball
+      if (s.phase !== 'gameover') {
+        ctx.beginPath(); ctx.roundRect(s.bx-BS/2, s.by-BS/2, BS, BS, 2); ctx.fill();
+      }
+
+      // Labels
+      ctx.font = '14px monospace';
+      ctx.fillStyle = '#555';
+      ctx.fillText('YOU', W/2 - 100, H - 16);
+      ctx.fillText('AI', W/2 + 100, H - 16);
+
+      // Overlays
+      if (s.phase === 'start') {
+        ctx.fillStyle = 'rgba(0,0,0,0.55)';
+        ctx.fillRect(0,0,W,H);
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 52px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('PONG', W/2, H/2 - 50);
+        ctx.font = '20px monospace';
+        ctx.fillStyle = '#aaa';
+        ctx.fillText('W / S  — Move your paddle', W/2, H/2 + 10);
+        ctx.fillText('Press SPACE to start', W/2, H/2 + 60);
+      } else if (s.phase === 'gameover') {
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
+        ctx.fillRect(0,0,W,H);
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 44px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(s.winner === 'left' ? 'YOU WIN!' : 'AI WINS!', W/2, H/2 - 20);
+        ctx.font = '20px monospace';
+        ctx.fillStyle = '#aaa';
+        ctx.fillText('Press SPACE to play again', W/2, H/2 + 40);
+      }
+
+      ctx.textAlign = 'left';
+    }
+
+    let last = 0;
+    function loop(ts) {
+      const dt = Math.min((ts - last) / 1000, 0.05);
+      last = ts;
+      update(dt);
+      draw();
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
