@@ -16,6 +16,8 @@ import Sponsorship from "@/pages/sponsorship";
 import Services from "@/pages/services";
 import CleanupMap from "@/pages/cleanup-map";
 import NotFound from "@/pages/not-found";
+import Pacman from "@/pages/pacman";
+import Pong from "@/pages/pong";
 
 function Router() {
   return (
@@ -30,6 +32,8 @@ function Router() {
       <Route path="/sponsorship" component={Sponsorship} />
       <Route path="/services" component={Services} />
       <Route path="/map" component={CleanupMap} />
+      <Route path="/pacman" component={Pacman} />
+      <Route path="/pong" component={Pong} />
       <Route component={NotFound} />
     </Switch>
   );
